@@ -20,4 +20,4 @@ Currently I have only an example that is suitable for the ESP8266. If you have a
 
 
 ## License
-This program is available under the [MIT License](https://github.com/debruss/BeaconFrameESP8266/blob/master/LICENSE).
+This program is available under the [MIT License](https://github.com/debruss/BeaconFrameLib/blob/master/LICENSE).
