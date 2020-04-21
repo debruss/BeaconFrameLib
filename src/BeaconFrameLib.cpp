@@ -2,7 +2,9 @@
 #include <ESP8266WiFi.h>
 
 
+// In BeaconFrameLib.h this variable is defined as an extern one
 int BeaconFrameLength = 0;
+
 
 
 // Beacon Packet buffer 128
@@ -18,15 +20,25 @@ uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00,                           // Fra
                 /* SSID */
                 /*36*/  0x00}; // More information is added in the build_beacon_packet() function         
 
-// Supported rates
-uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01}; 
+// Supported rates (it is not changeable for now; if security features are added, this one will also change)
+const uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01}; 
 
 
+
+
+/**
+ * Build the beacon frame.
+ *
+ * This function build a beacon frame and assigns the length of it to the extern integer BeaconFrameLength.
+ * 
+ * @param beacon_name Pointer to the SSID of the beacon frame.
+ * @param mac_address Pointer to the MAC Address that the user wants to set (neglected when random_mac == true).
+ * @param beacon_channel Integer that specifies which channel. If 0, a random channel is chosen.
+ * @param random_mac Boolean that specifies whether to use random MAC Addresses or not.
+ * @return pointer to the start of the beacon frame.
+ */
 uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel, bool random_mac)
-{ 
-  //int beacon_index = 0;
-  //while(strcmp(beacon_name, ssids[beacon_index]) != 0) beacon_index++;
-  // Randomize SRC MAC (for now)
+{
   if(random_mac)
   {
     packet[10] = packet[16] = random(256);
@@ -44,10 +56,12 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
 
   
 
-  // Set the channel:
+  // Set the channel
   if(beacon_channel == 0) beacon_channel = random(12);
   wifi_set_channel(beacon_channel);
   
+  // Determine the length of the SSID and save it in int q.
+  // This will be neccessary to calculate the length of the beacon frame.
   int q = 0;
   do {
     q++;
