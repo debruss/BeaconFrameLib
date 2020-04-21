@@ -7,9 +7,8 @@
  *  ===== HOW TO USE =====
  *  1. Enter number of networks in: num_of_networks
  *  2. Enter the SSID's in: ssids[]
- *  3. Choose whether you have custom MAC Addresses or not at: const bool use_random_mac
- *  4. If you have custom MAC's, add them at: MACAddresses[]
- *  5. Let's go...
+ *  3. If you have custom MAC's, add them at: MACAddresses[]. If you want random MAC's enter NULL
+ *  4. Let's go...
  */
 
 
@@ -23,7 +22,6 @@ extern "C" {
 
 // === SETTINGS === 
 const int num_of_networks = 6;
-const bool use_random_mac = true;
 char* ssids[num_of_networks] =
 {
   "DeBruss",
@@ -47,7 +45,6 @@ int MACAddresses[num_of_networks][6] =
 
 void setup() {
   delay(500);
-  //Serial.begin(115200);
   wifi_set_opmode(STATION_MODE);
   wifi_promiscuous_enable(1);
 }
@@ -57,7 +54,7 @@ void setup() {
 void loop() {
   for(int k = 0; k < num_of_networks; k++)
   {
-    uint8_t* packet = build_beacon_packet(ssids[k], MACAddresses[k], 1, use_random_mac); // false --> use predefined MAC's, true --> create random MAC's
+    uint8_t* packet = build_beacon_packet(ssids[k], MACAddresses[k], 1);
     for(int i = 0; i < 3; i++) wifi_send_pkt_freedom(packet, BeaconFrameLength, 0);
     delay(1);
   }

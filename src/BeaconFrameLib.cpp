@@ -32,14 +32,13 @@ const uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x
  * This function build a beacon frame and assigns the length of it to the extern integer BeaconFrameLength.
  * 
  * @param beacon_name Pointer to the SSID of the beacon frame.
- * @param mac_address Pointer to the MAC Address that the user wants to set (neglected when random_mac == true).
+ * @param mac_address Pointer to the MAC Address that the user wants to set (if set to NULL, it will create a random MAC).
  * @param beacon_channel Integer that specifies which channel. If 0, a random channel is chosen.
- * @param random_mac Boolean that specifies whether to use random MAC Addresses or not.
  * @return pointer to the start of the beacon frame.
  */
-uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel, bool random_mac)
+uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel)
 {
-  if(random_mac)
+  if(mac_address == NULL)
   {
     packet[10] = packet[16] = random(256);
     packet[11] = packet[17] = random(256);

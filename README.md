@@ -9,7 +9,7 @@ Currently this, and the comments in the code are the only available documentatio
 
 BeaconFrameLib includes two things when included:
 - `int BeaconFrameLength`: this variable stores the length of the beacon frame; changing it is not recommended
-- `uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel, bool random_mac)`: this function builds the beaconpacket (and meanwhile sets `int BeaconFrameLength` accordingly). It returns the address of the start of the beacon.
+- `uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel)`: this function builds the beaconpacket (and meanwhile sets `int BeaconFrameLength` accordingly). It returns the address of the start of the beacon.
 
 ## Libraries
 This library depends on:
