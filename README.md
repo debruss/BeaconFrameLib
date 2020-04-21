@@ -1,5 +1,9 @@
 # BeaconFrameLib
-BeaconFrameLib is a library that can be used to create beacon frames, which can be used to fake a WiFi network. Currently this library supports custom SSID's and custom/random MAC addresses. This will be expanded to information like security for example. 
+BeaconFrameLib is a library that can be used to create beacon frames, which can be used to fake a WiFi network. Currently this library supports:
+- Custom SSID's 
+- Custom/random MAC addresses
+- Custom/random channels
+This will be expanded to information like security for example. 
 
 ## Contribute
 In the case of any issues that might occur, please send them via the [Issues tab](https://github.com/debruss/BeaconFrameESP8266/issues). Also, pull requests with new/improved features are always welcome :) 
