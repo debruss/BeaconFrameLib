@@ -25,7 +25,6 @@ const uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x
 
 
 
-
 /**
  * Build the beacon frame.
  *
@@ -73,4 +72,18 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
 
   BeaconFrameLength = 48+q;  // 38+12+q-2;
   return packet;
+}
+
+
+/**
+ * Build a simple beacon frame.
+ *
+ * This function builds a simple beacon frame. This function is extra useful for getting to know this library, since it only needs an SSID.
+ * 
+ * @param beacon_name Pointer to the SSID of the beacon frame.
+ * @return pointer to the start of the beacon frame.
+ */
+uint8_t* build_simple_beacon_packet(char* beacon_name)
+{
+  return build_beacon_packet(beacon_name, NULL, 0);
 }

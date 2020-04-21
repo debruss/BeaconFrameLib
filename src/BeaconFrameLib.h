@@ -8,5 +8,6 @@ extern int BeaconFrameLength;
 
 // Prototypes
 uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_channel);
+uint8_t* build_simple_beacon_packet(char* beacon_name)
 
 #endif
