@@ -20,8 +20,14 @@ uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00,                           // Fra
                 /* SSID */
                 /*36*/  0x00}; // More information is added in the build_beacon_packet() function         
 
+
+
+
+
 // Supported rates (it is not changeable for now; if security features are added, this one will also change)
 const uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01}; 
+
+
 
 
 
@@ -56,23 +62,30 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
 
   // Set the channel
   if(beacon_channel == 0) beacon_channel = random(12);
+  
+  // This should not be here, but it is a neccessary thing to set
+  // I don't want the user to have to remember this step.
   wifi_set_channel(beacon_channel);
   
   // Determine the length of the SSID and save it in int q.
   // This will be neccessary to calculate the length of the beacon frame.
-  int q = 0;
+  int ssid_length = 0;
   do {
-    q++;
-  } while(beacon_name[q] != '\0');
+    ssid_length++;
+  } while(beacon_name[ssid_length] != '\0');
 
-  packet[37] = q;
-  for(int i = 0; i < q; i++) packet[38+i] = beacon_name[i];
-  for(int i = q; i < q+12; i++) packet[i+38] = tail[i-q];
-  packet[50+q] = beacon_channel; // 38+12+q
+  packet[37] = ssid_length;
+  for(int i = 0; i < ssid_length; i++) packet[38+i] = beacon_name[i];
+  for(int i = ssid_length; i < ssid_length+12; i++) packet[i+38] = tail[i-ssid_length];
+  packet[50+ssid_length] = beacon_channel; // 38+12+q
 
-  BeaconFrameLength = 48+q;  // 38+12+q-2;
+  BeaconFrameLength = 48 + ssid_length;  // 38+12+q-2;
   return packet;
 }
+
+
+
+
 
 
 /**
