@@ -1,5 +1,5 @@
 #include "BeaconFrameLib.h"
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h> // for now just for the wifi_set_channel() function, but it eventually has to go away. 
 
 
 // In BeaconFrameLib.h this variable is defined as an extern one
@@ -18,13 +18,14 @@ uint8_t packet[128] = { 0x80, 0x00, 0x00, 0x00,                           // Fra
                 /*32*/  0x64, 0x00,                                       // Interval
                 /*34*/  0x01, 0x04,                                       // Capabilities
                 /* SSID */
-                /*36*/  0x00}; // More information is added in the build_beacon_packet() function         
+                /*36*/  0x00};  // More information is added/edited in the build_beacon_packet() function
+                                // The 0x00 does not really have a meaning
 
 
 
 
 
-// Supported rates (it is not changeable for now; if security features are added, this one will also change)
+// Supported rates. It is not changeable for now; if security features are added, this one will also change :)
 const uint8_t tail[] = {0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x24, 0x30, 0x48, 0x6c, 0x03, 0x01}; 
 
 
@@ -54,7 +55,7 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
   } else {
     for(int i = 0; i < 6; i++)
     {
-      packet[10+i] = packet[16+i] = mac_address[i];
+      packet[10+i] = packet[16+i] = mac_address[i]; // Copy a predefined MAC into the beacon
     }
   }
 
@@ -67,7 +68,7 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
   // I don't want the user to have to remember this step.
   wifi_set_channel(beacon_channel);
   
-  // Determine the length of the SSID and save it in int q.
+  // Determine the length of the SSID and save it in int ssid_length.
   // This will be neccessary to calculate the length of the beacon frame.
   int ssid_length = 0;
   do {
@@ -79,8 +80,8 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
   for(int i = ssid_length; i < ssid_length+12; i++) packet[i+38] = tail[i-ssid_length];
   packet[50+ssid_length] = beacon_channel; // 38+12+q
 
-  BeaconFrameLength = 48 + ssid_length;  // 38+12+q-2;
-  return packet;
+  BeaconFrameLength = 48 + ssid_length;  // 38+12+q-2; the total length of the beacon
+  return packet;  // Pointer to the start of the packet
 }
 
 
@@ -98,5 +99,6 @@ uint8_t* build_beacon_packet(char* beacon_name, int* mac_address, int beacon_cha
  */
 uint8_t* build_simple_beacon_packet(char* beacon_name)
 {
+  // It just uses the already made function
   return build_beacon_packet(beacon_name, NULL, 0);
 }
